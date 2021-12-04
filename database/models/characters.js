@@ -1,9 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const db = require('../index.js');
+
 mongoose.Promise = global.Promise;
 
-const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
+const { Schema } = mongoose;
+const { ObjectId } = Schema;
 
 const Characters = new Schema({
   _id: Number,
@@ -25,14 +26,14 @@ const Characters = new Schema({
   fPlans: String,
   personality: String,
   references: String,
-  lastUpdate: Date
+  lastUpdate: Date,
 });
 
-Characters.pre('find', function() {
+Characters.pre('find', function () {
   this._startTime = Date.now();
 });
 
-Characters.post('find', function() {
+Characters.post('find', function () {
   if (this._startTime != null) {
     console.log('Runtime in MS: ', Date.now() - this._startTime);
   }

@@ -23,11 +23,15 @@ app.get('/characters/:user', (req, res) => {
 // add new information to the database
 app.post('/characters/:user', (req, res) => {
   const newChar = req.body;
-  newChar._id = helpers.getNextSequenceValue('charid');
-  Character.create(newChar)
-    .then(() => res.status(200).send('Post Successful!'))
-    .then((data) => console.log('success', data))
-    .catch((err) => res.status(400).send(err));
+  async function updateChar() {
+    newChar._id = await helpers.getNextSequenceValue('charid');
+    console.log('yes', newChar);
+    Character.create(newChar)
+      .then(() => res.status(200).send('Post Successful!'))
+      .then((data) => console.log('success', data))
+      .catch((err) => res.status(400).send(err));
+  }
+  updateChar();
 });
 
 // update information in the database

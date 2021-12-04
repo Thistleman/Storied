@@ -1,14 +1,18 @@
 const db = require('../database/index.js');
+const Character = require('../database/models/characters.js');
 
 const helpers = {
-  getNextSequenceValue: (sequenceName) => {
-    const sequenceDocument = db.counters.findAndModify({
-      query: { _id: sequenceName },
-      update: { $inc: { sequence_value: 1 } },
-      new: true,
-    });
-    return sequenceDocument.sequence_value;
-  },
+  getNextSequenceValue: (sequenceName) => db.collection('counters').findOneAndUpdate({
+    _id: sequenceName,
+  }, {
+    $inc: {
+      sequence_value: 1,
+    },
+  }, {
+    sort: {
+      sequence_value: 1,
+    },
+  }).then((data) => data.value.sequence_value),
 };
 
 module.exports = helpers;
